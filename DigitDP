@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+vector<ll>vt;
+int d,k;
+int dp[12][12][12];
+ll fun(ll pos,ll cnt,ll f){
+    if(cnt > k)return 0;
+	if(pos == vt.size()){
+		if(cnt == k)return 1;
+		else return 0;
+	}
+	if(dp[pos][cnt][f]!=-1)return dp[pos][cnt][f];
+	ll res = 0;
+	int LIM;
+	if(f==0){
+		LIM = vt[pos];
+	}
+	else{
+		LIM = 9;
+	}
+	for(int i = 0 ; i <= LIM ; i++){
+		ll nf = f;
+		ll ncnt = cnt;
+		if(f == 0 and i < LIM)nf = 1;
+		if(i == d)ncnt++;
+		
+		if(ncnt <= k)res += fun(pos+1,ncnt,nf);
+	}
+	return dp[pos][cnt][f]=res;
+}
+ll solver(ll n){
+    vt.clear();
+    while(n>0){
+        int r=n%10;
+        n/=10;
+        vt.push_back(r);
+    }
+    reverse(vt.begin(),vt.end());
+    memset(dp,-1,sizeof(dp));
+    ll res=fun(0,0,0);
+    return res;
+    
+}
+int main()
+{
+    int a,b;
+    cin>>a>>b>>d>>k;
+    ll ans=solver(b)-solver(a-1);
+    cout<<ans;
+}
